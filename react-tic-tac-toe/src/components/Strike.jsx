@@ -1,8 +1,8 @@
 import React from 'react'
 
-function Strike() {
+function Strike({strikeClass}) {
   return (
-    <div>Strike</div>
+    <div className={`strike ${strikeClass}`}></div>
   )
 }
 
