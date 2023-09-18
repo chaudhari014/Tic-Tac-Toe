@@ -11,7 +11,7 @@ const gameOverSound=new Audio(gameOverSoundAsset)
 const clickSound=new Audio(clickSoundAsset)
 const winningSound=new Audio(winningSoundAsset)
 
-console.log(winningSound)
+
 const PLAYER_X="X"
 const PLAYER_O="O"
 const winningCombination=[
