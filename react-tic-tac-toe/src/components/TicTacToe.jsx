@@ -2,9 +2,18 @@ import React,{useState,useEffect} from 'react'
 import Board from './Board'
 import GameOver from './GameOver'
 import GameState from './GameState'
+import Reset from './Reset'
+import gameOverSoundAsset from "../sounds/gameOver.wav"
+import clickSoundAsset from "../sounds/click.wav"
+import winningSoundAsset from "../sounds/winning.wav"
+
+const gameOverSound=new Audio(gameOverSoundAsset)
+const clickSound=new Audio(clickSoundAsset)
+const winningSound=new Audio(winningSoundAsset)
+
+console.log(winningSound)
 const PLAYER_X="X"
 const PLAYER_O="O"
- 
 const winningCombination=[
   //row
   {combo:[0,1,2],strikeClass:"strike-row-1"},
@@ -26,15 +35,18 @@ function  checkWinner(tiles,setStrikeClass,setGameState){
            setStrikeClass((pre)=>(strikeClass))
            if(tiles[combo[0]]==="X"){
             setGameState(GameState.playerXwin)
+            
            }else{
             setGameState(GameState.playerOwin)
            }
+           winningSound.play()
            return;
       }
      }
    const checkAllIndex=tiles.every((ele)=> ele!==null);
    if(checkAllIndex){
     setGameState(GameState.draw)
+    gameOverSound.play()
    }
    return;
 }
@@ -46,6 +58,12 @@ function TicTacToe() {
   const [gameState,setGameState]=useState(GameState.inprogress)
   useEffect(()=>{
     checkWinner(tiles,setStrikeClass,setGameState)
+    
+    if(tiles.some((el)=>el!==null)){
+      clickSound.play();
+    }
+    
+
   },[tiles])
 
   const handleTileClick=(index)=>{
@@ -64,11 +82,18 @@ function TicTacToe() {
             setPlayerTurn(PLAYER_X)
           }
   }
+  const handleReset=()=>{
+       setTiles(Array(9).fill(null))
+       setPlayerTurn(PLAYER_X)
+       setStrikeClass("")
+       setGameState(GameState.inprogress)
+  }
   return (
     <div>
-        <h1>TicTacToe</h1>
+        <h1>Tic-Tac-Toe</h1>
         <Board  tiles={tiles} onTileClick={handleTileClick} classHover={playerTurn} strikeClass={strikeClass}/>
         <GameOver gameState={gameState}/>
+        <Reset gameState={gameState} onReset={handleReset}/>
     </div>
   )
 }
